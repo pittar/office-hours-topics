@@ -1,0 +1,35 @@
+schemaVersion: 2.2.2
+metadata:
+  name: "officehours"
+  provider: Andrew Pitt
+  displayName: Office Hours Repo
+  description: Topics for office hours.
+  tags:
+    - YAML
+    - Markdown
+  projectType: Documentation
+  language: Markdown
+components:
+  - name: tools
+    attributes:
+      pod-overrides:
+        metadata:
+          labels:
+            app: devspaces
+            costcentre: admin
+    container:
+      image: quay.io/pittar/custom-udi-demo:latest
+      args: ['tail', '-f', '/dev/null']
+      mountSources: true
+      cpuLimit: '2'
+      cpuRequest: '200m'
+      memoryLimit: '4G'
+      memoryRequest: '2G'
+commands:
+  - id: configure-opencode
+    exec:
+      component: tools
+      commandLine: "mkdir -p /home/user/.config/opencode && cp /data/opencode/*.* /home/user/.config/opencode/"
+events:
+  postStart:
+    - configure-opencode
